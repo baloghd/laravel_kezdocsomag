@@ -135,7 +135,7 @@ return [
         '.gitignore',
         '.styleci.yml',
         'artisan',
-        'composer.json',
+        //'composer.json',
         'phpunit.xml',
         'server.php',
         'app/Console/Kernel.php',
@@ -154,7 +154,8 @@ return [
         'app/Providers/AuthServiceProvider.php',
         'app/Providers/BroadcastServiceProvider.php',
         'app/Providers/EventServiceProvider.php',
-        'app/Providers/RouteServiceProvider.php',
+        // Breeze
+        //'app/Providers/RouteServiceProvider.php',
         'bootstrap/app.php',
         'config/auth.php',
         'config/broadcasting.php',
