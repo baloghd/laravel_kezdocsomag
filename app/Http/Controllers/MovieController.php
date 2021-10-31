@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Movie;
+use App\Models\Rating;
 
 class MovieController extends Controller
 {
-    public function index()
+    public static function getData()
     {
         $movies = Movie::latest()->paginate(10);
-
         return view('movies.index', compact('movies'));
     }
 
@@ -27,7 +27,8 @@ class MovieController extends Controller
     public function show($id)
     {
         $movie = Movie::find($id);
-        return view('movies.show', compact('movie'));
+        $ratings = Rating::where("movie_id", $id)->orderBy('created_at', 'desc')->paginate(10);
+        return view('movies.show', compact('movie', 'ratings'));
     }
 
     public function edit($id)

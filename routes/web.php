@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MovieController;
 
+use App\Models\Rating;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,12 +16,23 @@ use App\Http\Controllers\MovieController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', function () { return MovieController::getData();})->name("fooldal");
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
+
+require __DIR__.'/auth.php';
+
 
 Route::get("/toplista", function () {
-    return view('toplista');
-});
+    $ratings = Rating::query()
+                ->selectRaw('movie_id, AVG(rating) as avg_rating')
+                ->groupBy("movie_id")
+                ->orderBy("avg_rating", "desc")
+                ->limit(6)
+                ->get();
+    return view('toplista', compact("ratings"));
+})->name("toplista");
 
 Route::resource("movies", MovieController::class);

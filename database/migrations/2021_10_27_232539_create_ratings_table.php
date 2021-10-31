@@ -22,10 +22,10 @@ class CreateRatingsTable extends Migration
             comment (string, max 255, nullable)
             timestamps (created_at, updated_at)*/
             $table->integer("user_id");
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->integer("movie_id");
-            $table->foreign('movie_id')->references('id')->on('movies');
+            $table->foreign('movie_id')->references('id')->on('movies')->onDelete('cascade');
 
             $table->integer("rating");
             $table->string("comment", 255)->nullable();

@@ -16,7 +16,7 @@ class MovieFactory extends Factory
         return [
             'title' => $this->faker->numerify("movie-###"),
             'director' => $this->faker->name(),
-            "description" => $this->faker->sentence(),
+            "description" => $this->faker->sentences(10, true),
             "year" => $this->faker->year(),
             "length" => $this->faker->numberBetween(90, 200)
         ];
