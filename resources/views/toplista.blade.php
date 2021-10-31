@@ -9,6 +9,10 @@
         {{$rating->movie->id}}
     @endslot
 
+    @slot('img')
+        {{$rating->movie->image}}
+    @endslot
+
     @slot('title')
         {{$rating->movie->title}}
     @endslot
@@ -30,4 +34,3 @@
     @endcomponent
 
 @endforeach
-</ul>

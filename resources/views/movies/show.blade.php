@@ -22,20 +22,31 @@
     </div>
     
 </div>
+
+<div class="container mx-auto flex flex-col justify-items-center">
+@auth
+
+@if ($movie->ratings_enabled)
+@component('components.create_rating')
+
+@endcomponent
+
+@else
+
+
+<h2 class="text-3xl">ezt a filmet nem lehet értékelni.</h2>
+
+
+@endif
+
+
+@endauth
+
+</div>
+
+
 <div class="container mx-auto flex flex-col justify-items-center">
 
-        <!--
-            @foreach ($ratings as $rating)
-        <div class="md:ml-24">
-            <h3 class="text-l mt-4 font-bold">
-                <span>user_id={{ $rating->user_id }}</span>
-                <span>{{ $rating->created_at }}</span>
-            </h3>
-            <h4>rating={{ $rating->rating }}</h4>
-            <div class="">{{ $rating->comment}}</div>
-            </div>
-        @endforeach
-            -->
 
           
 <ul>

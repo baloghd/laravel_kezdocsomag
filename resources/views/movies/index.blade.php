@@ -1,36 +1,38 @@
 @include("layout.header")
 @include("layouts.navigation")
 
-<ul>
-@foreach ($movies as $movie)
+@foreach ($ratings as $rating)
 
     @component('components.moviecard')    
 
     @slot('id')
-        {{$movie->id}}
+        {{$rating->movie->id}}
+    @endslot
+
+    @slot('img')
+        {{$rating->movie->image}}
     @endslot
 
     @slot('title')
-        {{$movie->title}}
+        {{$rating->movie->title}}
+    @endslot
+
+    @slot('avg_rating')
+        Átlagos értékelés: {{$rating->avg_rating}}
     @endslot
 
     @slot('director')
-        {{$movie->director}}
+        {{$rating->movie->director}}
     @endslot
 
     @slot('length')
-        {{$movie->length}}
+        {{$rating->movie->length}}
     @endslot
 
-    @slot("avg_rating")
-    @endslot
-
-
-    {{$movie->description}}
+    {{$rating->movie->description}}
 
     @endcomponent
 
 @endforeach
-</ul>
 
-{!! $movies->links() !!}
+{!! $ratings->links() !!}

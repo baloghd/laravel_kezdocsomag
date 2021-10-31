@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MovieController;
-
+use App\Http\Controllers\RatingController;
 use App\Models\Rating;
 
 /*
@@ -16,7 +16,10 @@ use App\Models\Rating;
 |
 */
 
-Route::get('/', function () { return MovieController::getData();})->name("fooldal");
+Route::resource("movies", MovieController::class);
+Route::resource("ratings", RatingController::class);
+
+Route::get('/', function () { return RatingController::getMoviesWithRatings();})->name("fooldal");
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -35,4 +38,6 @@ Route::get("/toplista", function () {
     return view('toplista', compact("ratings"));
 })->name("toplista");
 
-Route::resource("movies", MovieController::class);
+
+//Route::post("/ratings/store", RatingController::class);
+//Route::post('/ratings/store', 'RatingController@store')->name('ratings.store');
