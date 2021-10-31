@@ -11,8 +11,8 @@
     </head>
     <body>
         <div class="container mx-auto">
-            <h1 class="text-4xl my-4">Szerveroldali webprogramozás</h1>
-            <h2 class="text-3xl my-4">Laravel kezdőcsomag</h2>
+            <h1 class="text-4xl my-4">Szerveroldali webprogramozás - Beadandó 1. felvonás</h1>
+            <h2 class="text-3xl my-4">Balogh Domonkos E3DJMU</h2>
 
             <ul class="list-disc ml-8">
                 <li><span>Tantárgyi jegyzet Laravelhez: </span> <a class="no-underline hover:underline text-indigo-600" href="https://github.com/totadavid95/szerveroldali-21-osz#laravel">https://github.com/totadavid95/szerveroldali-21-osz#laravel</a></li>
