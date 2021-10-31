@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\User;
+use App\Models\Movie;
+use App\Models\Rating;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,7 +17,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         User::factory(5)->create();
-        \App\Models\Movie::factory(10)->create();
-        \App\Models\Rating::factory(100)->create();
+        Movie::factory(10)->create();
+        Rating::factory(100)->create();
     }
 }
