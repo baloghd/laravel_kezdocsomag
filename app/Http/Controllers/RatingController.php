@@ -34,18 +34,49 @@ class RatingController extends Controller
 
     public function store(Request $request)
     {
+        if (!Auth::user()) {
+            return abort(403);
+        }
+
         $data = $request->validate([
             'rating'        => "integer|required",
-            'comment' => "required|min:10"
+            'comment' => "",
+            'movie_id' => "required"
         ], [
             'rating.required' => "Muszáj hogy számszerű legyen az értékelés.",
-            'comment.required' => "Legalább 10 karakter hosszú legyen."
+            'comment.min:10' => "Legalább 10 karakter hosszú legyen."
         ]);
-
         
+        
+        $user_id = Auth::user()->id;
 
-      return $data;
-     
+        $existing_rating = Rating::where('movie_id', "=", $data['movie_id'])->where('user_id', '=', $user_id);
+        $modosit = true;
+        if (empty($existing_rating->get()->all())) {
+            $modosit = false;
+            Rating::factory()->create([
+                "rating" => $data['rating'],
+                'comment' => $data['comment'],
+                'movie_id' => $data['movie_id'],
+                'user_id' => $user_id
+            ]);
+        } else {
+            
+            $existing_rating->update(
+                [
+                    "rating" => $data['rating'],
+                'comment' => $data['comment']
+                ]
+            );
+        }
+      return redirect()->route('movies.show', ["movie" => $data['movie_id'], "s"=>"1"]);
+      /*return  redirect(
+          action('MovieController@show', [
+              "movie" => $data['movie_id'],
+              "message" => "Az értékelés".($modosit ? " módosítása" : " létrehozása")." sikeres."
+          ]));
+          */
+    
     }
 
     public function show($id)

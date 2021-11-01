@@ -25,21 +25,31 @@ class MovieController extends Controller
         //
     }
 
-    public function show($id)
+    public static function show($id, $message="")
     {
+        if (!$message)
+        {
+            $message = "";
+        }
         $movie = Movie::find($id);
         $ratings = Rating::where("movie_id", $id)->orderBy('created_at', 'desc')->paginate(10);
-        $current_users_rating = Rating::where("movie_id", $id)->where("user_id", Auth::user()->id)->get();
 
-        if (empty($current_users_rating->all())) {
-            $ex_rating = 1;
-            $ex_comment = "";
+        if (Auth::user()) {
+            $current_users_rating = Rating::where("movie_id", $id)->where("user_id", Auth::user()->id)->get();
+
+            if (empty($current_users_rating->all())) {
+                $ex_rating = 1;
+                $ex_comment = "";
+            } else {
+                $ex_rating = $current_users_rating[0]->rating;
+                $ex_comment = $current_users_rating[0]->comment;
+            }
         } else {
-            $ex_rating = $current_users_rating[0]->rating;
-            $ex_comment = $current_users_rating[0]->comment;
+            $ex_comment = "";
+            $ex_rating = 5;
         }
-
-        return view('movies.show', compact('movie', 'ratings', 'ex_rating', 'ex_comment'));
+       
+        return view('movies.show', compact('movie', 'ratings', 'ex_rating', 'ex_comment', 'message'));
     }
 
     public function edit($id)

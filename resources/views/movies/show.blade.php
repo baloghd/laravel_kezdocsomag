@@ -30,7 +30,7 @@
 
 
 
-        @component('components.create_rating', ["existing_rating" =>  $ex_rating])
+        @component('components.create_rating', ["existing_rating" =>  $ex_rating, 'movie_id' => $movie->id, "message" => $message])
 
             @slot("existing_comment")
 
@@ -61,11 +61,11 @@
           
 <ul>
 @foreach ($ratings as $rating)
-    <li>user{{$rating->user_id}} (értékelés={{$rating->rating}}): {{$rating->comment}}</li>
+    <li><span class="text-xl font-bold">user{{$rating->user_id}}</span> <span class="text-l font-bold">(értékelés={{$rating->rating}})</span>: {{$rating->comment}}</li>
 @endforeach
 </ul>
-
+<div class="justify-items-center">
 {!! $ratings->links() !!}
-
+</div>
 
 </div>
