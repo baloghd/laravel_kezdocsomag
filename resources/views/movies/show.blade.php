@@ -26,18 +26,28 @@
 <div class="container mx-auto flex flex-col justify-items-center">
 @auth
 
-@if ($movie->ratings_enabled)
-@component('components.create_rating')
-
-@endcomponent
-
-@else
+    @if ($movie->ratings_enabled)
 
 
-<h2 class="text-3xl">ezt a filmet nem lehet értékelni.</h2>
+
+        @component('components.create_rating', ["existing_rating" =>  $ex_rating])
+
+            @slot("existing_comment")
+
+                    {{$ex_comment}}
+            
+            @endslot
+        @endcomponent
+
+   
+
+    @else
 
 
-@endif
+    <h2 class="text-3xl">ezt a filmet nem lehet értékelni.</h2>
+
+
+    @endif
 
 
 @endauth
@@ -51,7 +61,7 @@
           
 <ul>
 @foreach ($ratings as $rating)
-    <li>{{$rating->comment}}</li>
+    <li>user{{$rating->user_id}} (értékelés={{$rating->rating}}): {{$rating->comment}}</li>
 @endforeach
 </ul>
 

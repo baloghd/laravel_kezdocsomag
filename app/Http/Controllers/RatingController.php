@@ -11,7 +11,7 @@ class RatingController extends Controller
 {
     public function getData()
     {
-        $movies = Rating::latest()->paginate(10);
+        $ratings = Rating::latest()->paginate(10);
         return view('ratings.index', compact('ratings'));
     }
 
@@ -19,7 +19,6 @@ class RatingController extends Controller
         $ratings = Rating::query()
         ->selectRaw('movie_id, AVG(rating) as avg_rating')
         ->groupBy("movie_id")
-        //->orderBy("avg_rating", "desc")
         ->latest()
         ->paginate(10);
 
@@ -35,11 +34,17 @@ class RatingController extends Controller
 
     public function store(Request $request)
     {
-        /*$request->validate(
+        $data = $request->validate([
+            'rating'        => "integer|required",
+            'comment' => "required|min:10"
+        ], [
+            'rating.required' => "Muszáj hogy számszerű legyen az értékelés.",
+            'comment.required' => "Legalább 10 karakter hosszú legyen."
+        ]);
 
-        )*/
-        error_log('Some message here.');
-      return $request;
+        
+
+      return $data;
      
     }
 
