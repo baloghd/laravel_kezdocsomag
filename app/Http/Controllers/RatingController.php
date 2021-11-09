@@ -7,6 +7,7 @@ use App\Models\Rating;
 
 use Auth;
 
+
 class RatingController extends Controller
 {
     public function getData()
@@ -24,6 +25,18 @@ class RatingController extends Controller
 
         return view('movies.index', compact("ratings"));
 
+    }
+
+    public static function deleteAllRatingsFromMovie($id)
+    {
+        if (Auth::user()->is_admin) {
+            return redirect()->route('login');
+        }
+
+        Rating::where('movie_id', "=", $id)->delete();
+
+
+        return MovieController::show($id);
     }
 
     public function create()
@@ -46,8 +59,8 @@ class RatingController extends Controller
             'rating.required' => "Muszáj hogy számszerű legyen az értékelés.",
             'comment.min:10' => "Legalább 10 karakter hosszú legyen."
         ]);
-        
-        
+
+
         $user_id = Auth::user()->id;
 
         $existing_rating = Rating::where('movie_id', "=", $data['movie_id'])->where('user_id', '=', $user_id);
@@ -61,7 +74,7 @@ class RatingController extends Controller
                 'user_id' => $user_id
             ]);
         } else {
-            
+
             $existing_rating->update(
                 [
                     "rating" => $data['rating'],
@@ -76,7 +89,7 @@ class RatingController extends Controller
               "message" => "Az értékelés".($modosit ? " módosítása" : " létrehozása")." sikeres."
           ]));
           */
-    
+
     }
 
     public function show($id)
@@ -97,8 +110,18 @@ class RatingController extends Controller
         //
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, Rating $rating)
     {
         //
+
+        $this->authorize('delete', $rating);
+
+        $deleted = $rating->delete();
+        if (!$deleted) {
+            return abort(500);
+        }
+
+        $request->session()->flash('rating_deleted', $rating);
+        return redirect()->route('movies.index');
     }
 }

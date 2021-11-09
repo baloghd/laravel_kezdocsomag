@@ -21,6 +21,7 @@ class CreateRatingsTable extends Migration
             rating (integer, 1-5)
             comment (string, max 255, nullable)
             timestamps (created_at, updated_at)*/
+            $table->id();
             $table->integer("user_id");
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 

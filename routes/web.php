@@ -19,7 +19,13 @@ use App\Models\Rating;
 Route::resource("movies", MovieController::class);
 Route::resource("ratings", RatingController::class);
 
+Route::get("/movies/{id}/deleteratings", function($id) {return RatingController::deleteAllRatingsFromMovie($id);})->name("movies.deleteratings");
+#Route::get("/movies/{id}/deleteratings", function($id) {echo $id;})->name("movies.deleteratings");
+
+Route::get("/movies/{id}/poster", [MovieController::class, "poster"])->name("movies.poster");
+
 Route::get('/', function () { return RatingController::getMoviesWithRatings();})->name("fooldal");
+#Route::get('/', function () { return MovieController::getMoviesWithRatings();})->name("fooldal");
 
 Route::get('/dashboard', function () {
     return view('dashboard');

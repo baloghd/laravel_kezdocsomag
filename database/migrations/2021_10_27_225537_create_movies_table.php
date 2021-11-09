@@ -34,6 +34,7 @@ class CreateMoviesTable extends Migration
             $table->string("image")->default("https://via.placeholder.com/300x400?text=Placeholder+filmposzter");
             $table->boolean('ratings_enabled')->default(true);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

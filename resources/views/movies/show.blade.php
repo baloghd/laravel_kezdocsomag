@@ -1,12 +1,32 @@
 @include("layout.header")
 @include("layouts.navigation")
 
+@if (Auth::check() && (Auth::user()->is_admin))
+<div>
+    <h1 class="text-3xl"><a href="/movies/create">Film módosítása</table></a></h1>
+</div>
+<div>
+    <h1 class="text-3xl"><a href="/movies/{{$movie->id}}/deleteratings">Értékelések törlése</a></h1>
+</div>
+<div>
+    <h1 class="text-3xl"><a href="/movies/{{$movie->id}}/deleter">Film törlése</a></h1>
+</div>
+@endif
 
 <div class="container mx-auto px-4 py-16 flex flex-col md:flex-row">
 
+    @if (!str_contains($movie->image, "placeholder.com"))
+    <div class="flex-none">
+        <img src="{{ route('movies.poster', ['id' => $movie->id]) }}" alt="poster" class="w-64 lg:w-96">
+    </div>
+    @else
     <div class="flex-none">
         <img src="{{ $movie->image }}" alt="poster" class="w-64 lg:w-96">
     </div>
+    @endif
+
+
+
 
     <div class="md:ml-24">
 
@@ -20,7 +40,7 @@
         {{ $movie->description }}
         </p>
     </div>
-    
+
 </div>
 
 <div class="container mx-auto flex flex-col justify-items-center">
@@ -35,18 +55,12 @@
             @slot("existing_comment")
 
                     {{$ex_comment}}
-            
+
             @endslot
         @endcomponent
 
-   
-
     @else
-
-
-    <h2 class="text-3xl">ezt a filmet nem lehet értékelni.</h2>
-
-
+        <h2 class="text-3xl">ezt a filmet nem lehet értékelni.</h2>
     @endif
 
 
@@ -58,7 +72,7 @@
 <div class="container mx-auto flex flex-col justify-items-center">
 
 
-          
+
 <ul>
 @foreach ($ratings as $rating)
     <li><span class="text-xl font-bold">user{{$rating->user_id}}</span> <span class="text-l font-bold">(értékelés={{$rating->rating}})</span>: {{$rating->comment}}</li>

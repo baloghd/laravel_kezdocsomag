@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
 
         $users = collect();
         $ratings_by_movie_id = collect();
-        for ($i=1; $i < $n_user; $i++) { 
+        for ($i=1; $i < $n_user; $i++) {
             $usr = User::factory()->create([
                 'name' => 'user'.$i,
                 'email' => 'user'.$i.'@szerveroldali.hu'
@@ -47,7 +47,8 @@ class DatabaseSeeder extends Seeder
 
         User::factory()->create([
             'name' => 'admin',
-            'email' => 'admin@szerveroldali.hu'
+            'email' => 'admin@szerveroldali.hu',
+            'is_admin' => true
         ]);
     }
 }
