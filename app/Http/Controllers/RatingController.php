@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Rating;
+use App\Models\Movie;
 
 use Auth;
 
 
 class RatingController extends Controller
 {
-    public static function getMoviesWithRatings() {
+    /*public static function getMoviesWithRatings() {
         $ratings = Rating::query()
         ->selectRaw('movie_id, AVG(rating) as avg_rating')
         ->groupBy("movie_id")
@@ -18,6 +19,33 @@ class RatingController extends Controller
         ->paginate(10);
 
         return view('movies.index', compact("ratings"));
+
+    }*/
+
+    public function toplista() {
+
+
+        $deleted_movies = array_map(function($x) { return $x->id; }, Movie::onlyTrashed()->get('id')->all());
+
+        $tr = Rating::query()->selectRaw('movie_id, AVG(rating) as avg_rating')
+                    ->whereNotIn("movie_id", $deleted_movies)
+                    ->groupBy("movie_id")
+                    ->orderBy("avg_rating", "desc")
+                    ->limit(6)
+                    ->get()->all();
+
+        $ratings = collect();
+
+        foreach($tr as $t) {
+            $ratings[intval($t->movie_id)] = $t->avg_rating;
+        }
+
+        $m = Movie::query()->whereIn("id", $ratings->keys()->all())->get()->all();
+
+        $mc = collect();
+        foreach($m as $movie) { $mc[$movie->id] = $movie; }
+
+        return view('toplista', compact('ratings', 'mc'));
 
     }
 

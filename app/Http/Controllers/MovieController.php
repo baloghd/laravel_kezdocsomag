@@ -25,7 +25,7 @@ class MovieController extends Controller
     {
 
         if (Auth::user() && Auth::user()->is_admin) {
-            $movies = Movie::withTrashed()->get();
+            $movies = Movie::withTrashed()->latest()->get();
         } else {
             $movies = Movie::latest()->get();
         }
@@ -47,7 +47,7 @@ class MovieController extends Controller
         }
 
         if (Auth::user() && Auth::user()->is_admin) {
-            $movies = Movie::withTrashed()->paginate(10);
+            $movies = Movie::withTrashed()->latest()->paginate(10);
         } else {
             $movies = Movie::latest()->paginate(10);
         }
@@ -66,18 +66,22 @@ class MovieController extends Controller
 
     public function store(Request $request)
     {
+        if (!Auth::user()->is_admin) {
+            return redirect()->route('login');
+        }
 
         $data = $request->validate([
-            'title'        => "required|",
-            'director' => "required|",
-            'year' => "integer|min:1870|max:2021",
+            'title'        => "required|max:255",
+            'director' => "required|max:128",
+            'year' => "required|integer|min:1870|max:" . date("Y"),
             'description' => 'nullable|max:512',
             'length' => 'integer|nullable',
-            'file' => 'required|mimes:jpg,png|max:2048'
+            'file' => 'mimes:jpg,png|max:2048'
         ], [
            // 'title.required' => "Muszáj hogy számszerű legyen az értékelés.",
            // 'comment.min:10' => "Legalább 10 karakter hosszú legyen."
         ]);
+
 
         if ($request->hasFile('file')) {
             $file = $request->file('file');
@@ -86,18 +90,21 @@ class MovieController extends Controller
             Storage::disk('public')->put('posters\\' . $data['file_hash_name'], $file->get());
         }
 
-        Movie::factory()->create(
+        $m = Movie::factory()->create(
             [
                 "title" => $data['title'],
                 "director" => $data['director'],
                 "year" => $data['year'],
                 "description" => $data['description'],
                 "length" => $data['length'],
-                "image" => 'posters\\' . $data['file_hash_name']
+                "image" => $request->hasFile('file') ? 'posters\\' . $data['file_hash_name'] :
+                "https://via.placeholder.com/300x400?text=Placeholder+filmposzter"
             ]
         );
 
-        var_dump($data);
+        return redirect()->route("movies.show", [
+            "movie" => $m->id
+        ]);
 
     }
 
@@ -159,9 +166,9 @@ class MovieController extends Controller
         }
 
         $data = $request->validate([
-            'title'        => "required|",
-            'director' => "required|",
-            'year' => "integer|min:1870|max:2021",
+            'title'        => "required|max:255",
+            'director' => "required|max:128",
+            'year' => "required|integer|min:1870|max:" . date("Y"),
             'description' => 'nullable|max:512',
             'length' => 'integer|nullable',
             'file' => 'mimes:jpg,png|max:2048',
@@ -214,9 +221,8 @@ class MovieController extends Controller
         );
 
         return redirect()->route("movies.show", [
-            "movie" => $movie,
-            "e" => 1
-        ]);
+            "movie" => $movie
+        ])->with('modify','A film módosítása sikeres.');
     }
 
     public function destroy($id)
@@ -241,9 +247,8 @@ class MovieController extends Controller
 
 
         return redirect()->route("movies.show", [
-            "movie" => $movie->id,
-            "t" => 1
-        ]);
+            "movie" => $movie
+        ])->with('delete_ratings','Az értékelések törlése sikeres.');
     }
 
     public function delete($id) {
@@ -252,9 +257,8 @@ class MovieController extends Controller
 
 
         return redirect()->route("movies.show", [
-            "movie" => $movie->id,
-            "d" => 1
-        ]);
+            "movie" => $movie
+        ])->with('delete_movie','A film soft-törlése sikeres.');
     }
 
     public function restore($id) {
@@ -263,8 +267,7 @@ class MovieController extends Controller
 
 
         return redirect()->route("movies.show", [
-            "movie" => $movie->id,
-            "r" => 1
-        ]);
+            "movie" => $movie
+        ])->with('restore_movie','A film visszaállítása sikeres.');
     }
 }

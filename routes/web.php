@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\RatingController;
 use App\Models\Rating;
+use App\Models\Movie;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,15 +36,7 @@ Route::get('/dashboard', function () {
 require __DIR__.'/auth.php';
 
 
-Route::get("/toplista", function () {
-    $ratings = Rating::query()
-                ->selectRaw('movie_id, AVG(rating) as avg_rating')
-                ->groupBy("movie_id")
-                ->orderBy("avg_rating", "desc")
-                ->limit(6)
-                ->get();
-    return view('toplista', compact("ratings"));
-})->name("toplista");
+Route::get("/toplista", [RatingController::class, "toplista"])->name("toplista");
 
 
 //Route::post("/ratings/store", RatingController::class);

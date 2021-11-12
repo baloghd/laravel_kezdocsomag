@@ -9,4 +9,4 @@ A feladat beadásával elismerem, hogy tudomásul vettem a nyilatkozatban foglal
 - Tudomásul vettem, hogy az Eötvös Loránd Tudományegyetem Hallgatói Követelményrendszere (ELTE szervezeti és működési szabályzata, II. Kötet, 74/C. §) kimondja, hogy mindaddig, amíg egy hallgató egy másik hallgató munkáját - vagy legalábbis annak jelentős részét - saját munkájaként mutatja be, az fegyelmi vétségnek számít.
 - Tudomásul vettem, hogy a fegyelmi vétség legsúlyosabb következménye a hallgató elbocsátása az egyetemről.
 
-Kelt: 2021. 11. 01. 15:11:57
+Kelt: 2021. 11. 12. 21:11:31

@@ -4,18 +4,30 @@
 @if (Auth::check() && (Auth::user()->is_admin))
 <div>
     <h1 class="text-3xl"><a href={{ route('movies.edit', ['movie' => $movie->id]) }}>Film módosítása</table></a></h1>
+    @if(Session::has('modify'))
+        {{Session::get('modify')}}
+    @endif
 </div>
 <div>
     <h1 class="text-3xl"><a href={{ route('movies.deleteratings', ['id' => $movie->id]) }}>Értékelések törlése</a></h1>
+    @if(Session::has('delete_ratings'))
+        {{Session::get('delete_ratings')}}
+    @endif
 </div>
 
 @if (!is_null($movie->deleted_at))
 <div>
     <h1 class="text-3xl"><a href={{ route('movies.restore', ['id' => $movie->id]) }}>Film visszaállítása</a></h1>
+    @if(Session::has('delete_movie'))
+        {{Session::get('delete_movie')}}
+    @endif
 </div>
 @else
 <div>
     <h1 class="text-3xl"><a href={{ route('movies.delete', ['id' => $movie->id]) }}>Film törlése</a></h1>
+    @if(Session::has('restore_movie'))
+        {{Session::get('restore_movie')}}
+    @endif
 </div>
 
 @endif

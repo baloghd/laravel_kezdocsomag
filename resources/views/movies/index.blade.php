@@ -2,8 +2,9 @@
 @include("layouts.navigation")
 
 @if (Auth::check() && (Auth::user()->is_admin))
-<div>
-    <h1 class="text-3xl"><a href="/movies/create">Új film</a></h1>
+<div class="mt-4 ml-5">
+
+    <h1 class="text-3xl"><a href="/movies/create" class="text-blue-600">Új film</a></h1>
 </div>
 @endif
 
