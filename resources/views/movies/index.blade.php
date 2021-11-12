@@ -8,42 +8,56 @@
 @endif
 
 
-@foreach ($ratings as $rating)
+@foreach ($movies as $movie)
 
     @component('components.moviecard')
 
     @slot('id')
-        {{$rating->movie->id}}
+        {{$movie->id}}
     @endslot
 
-    @slot('img')
-        {{$rating->movie->image}}
-    @endslot
+    @if (!str_contains($movie->image, "placeholder.com"))
+        @slot('img')
+            {{ route('movies.poster', ['id' => $movie->id]) }}
+        @endslot
+    @else
+        @slot('img')
+            {{ $movie->image }}
+        @endslot
+    @endif
+
+
 
     @slot('title')
-        {{$rating->movie->title}}
+        {{$movie->title}}
     @endslot
+
 
     @slot('is_deleted')
-        {{$rating->movie->deleted_at}}
+        @if (!is_null($movie->deleted_at))
+            {{"törölve ekkor:" . $movie->deleted_at}}
+        @else
+            {{""}}
+        @endif
     @endslot
 
+
     @slot('avg_rating')
-        Átlagos értékelés: {{$rating->avg_rating}}
+        Átlagos értékelés: {{number_format($rating_averages[$movie->id], 1)}}
     @endslot
 
     @slot('director')
-        {{$rating->movie->director}}
+        {{$movie->director}}
     @endslot
 
     @slot('length')
-        {{$rating->movie->length}}
+        {{$movie->length}}
     @endslot
 
-    {{$rating->movie->description}}
+    {{$movie->description}}
 
     @endcomponent
 
 @endforeach
 
-{!! $ratings->links() !!}
+{!! $movies->links() !!}

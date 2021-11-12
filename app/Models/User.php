@@ -43,6 +43,6 @@ class User extends Authenticatable
     ];
 
     public function ratings() {
-        return $this->hasMany(Ratings::class);
+        return $this->hasMany(Rating::class);
     }
 }

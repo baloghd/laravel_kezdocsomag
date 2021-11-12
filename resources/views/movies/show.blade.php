@@ -31,6 +31,12 @@
     <div class="md:ml-24">
 
         <h2 class="text-4xl mt-4 font-bold">{{ $movie->title }} ({{ $movie->year }})</h2>
+        @if (Auth::check() && (Auth::user()->is_admin))
+                @if (!is_null($movie->deleted_at))
+                    <h2 class="text-3xl text-red-600">{{' törölve ekkor: ' . $movie->deleted_at }}</h2>
+                @endif
+
+            @endif
         <div class="flex flex-wrap items-center text-gray-400 text-sm break-all">
             <span class="ml-1 font-bold">rendező: </span>{{ $movie->director }}
             <span class="ml-1 font-bold">hossz: </span> {{ $movie->length }} perc</span>

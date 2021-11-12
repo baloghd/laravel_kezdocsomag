@@ -5,23 +5,48 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-
 use App\Models\Movie;
 use App\Models\Rating;
 use Auth;
 
 
+
+
 class MovieController extends Controller
 {
-    public static function getData()
+    /*public static function getData()
     {
         $movies = Movie::latest()->paginate(5);
         return view('movies.index', compact('movies'));
+    }*/
+
+
+    public static function getMoviesWithAverageRatings()
+    {
+        $movies = Movie::withTrashed()->get();
+        $rating_averages = collect();
+        foreach($movies as $movie) {
+            $s = 0;
+            $c = 0;
+            foreach($movie->ratings()->get() as $rating) {
+                $c += 1;
+                $s += $rating->rating;
+            }
+            if ($c > 0) {
+                $rating_averages[$movie->id] = $s / $c;
+            } else {
+                $rating_averages[$movie->id] = 0;
+            }
+        }
+
+        $movies = Movie::withTrashed()->paginate(10);
+
+        return view('movies.index', compact('movies', 'rating_averages'));
     }
 
     public function create()
     {
-        if (Auth::user()->is_admin) {
+        if (!Auth::user()->is_admin) {
             return redirect()->route('login');
         }
 
@@ -71,7 +96,7 @@ class MovieController extends Controller
         {
             $message = "";
         }
-        $movie = Movie::find($id);
+        $movie = Movie::withTrashed()->find($id);
         $ratings = Rating::where("movie_id", $id)->orderBy('created_at', 'desc')->paginate(10);
 
         if (Auth::user()) {
@@ -108,7 +133,7 @@ class MovieController extends Controller
     }
 
     public function poster($id) {
-        $movie = Movie::find($id);
+        $movie = Movie::withTrashed()->find($id);
         if ($movie === null || $movie->image === null) {
             return abort(404);
         }

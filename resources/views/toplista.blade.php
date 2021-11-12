@@ -3,7 +3,7 @@
 
 @foreach ($ratings as $rating)
 
-    @component('components.moviecard')    
+    @component('components.moviecard')
 
     @slot('id')
         {{$rating->movie->id}}
@@ -13,12 +13,16 @@
         {{$rating->movie->image}}
     @endslot
 
+    @slot('is_deleted')
+        {{$rating->movie->deleted_at}}
+    @endslot
+
     @slot('title')
         {{$rating->movie->title}}
     @endslot
 
     @slot('avg_rating')
-        Átlagos értékelés: {{$rating->avg_rating}}
+        Átlagos értékelés: {{number_format($rating->avg_rating, 1)}}
     @endslot
 
     @slot('director')
