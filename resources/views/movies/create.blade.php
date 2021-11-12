@@ -1,7 +1,6 @@
 @include("layout.header")
 @include("layouts.navigation")
 
-
 <form action="{{ route('movies.store')}}" method="POST" enctype="multipart/form-data">
     @csrf
     <div class="rendered-form">

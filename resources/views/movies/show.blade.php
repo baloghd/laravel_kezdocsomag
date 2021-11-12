@@ -3,14 +3,23 @@
 
 @if (Auth::check() && (Auth::user()->is_admin))
 <div>
-    <h1 class="text-3xl"><a href="/movies/create">Film módosítása</table></a></h1>
+    <h1 class="text-3xl"><a href={{ route('movies.edit', ['movie' => $movie->id]) }}>Film módosítása</table></a></h1>
 </div>
 <div>
-    <h1 class="text-3xl"><a href="/movies/{{$movie->id}}/deleteratings">Értékelések törlése</a></h1>
+    <h1 class="text-3xl"><a href={{ route('movies.deleteratings', ['id' => $movie->id]) }}>Értékelések törlése</a></h1>
 </div>
+
+@if (!is_null($movie->deleted_at))
 <div>
-    <h1 class="text-3xl"><a href="/movies/{{$movie->id}}/deleter">Film törlése</a></h1>
+    <h1 class="text-3xl"><a href={{ route('movies.restore', ['id' => $movie->id]) }}>Film visszaállítása</a></h1>
 </div>
+@else
+<div>
+    <h1 class="text-3xl"><a href={{ route('movies.delete', ['id' => $movie->id]) }}>Film törlése</a></h1>
+</div>
+
+@endif
+
 @endif
 
 <div class="container mx-auto px-4 py-16 flex flex-col md:flex-row">
@@ -78,12 +87,16 @@
 <div class="container mx-auto flex flex-col justify-items-center">
 
 
+@isset($_GET['t'])
+    <span class="text-3xl text-green-500">{{"az értékelések törlése sikeres!"}}</span>
+@endisset
 
 <ul>
 @foreach ($ratings as $rating)
-    <li><span class="text-xl font-bold">user{{$rating->user_id}}</span> <span class="text-l font-bold">(értékelés={{$rating->rating}})</span>: {{$rating->comment}}</li>
+    <li><span class="text-xl font-bold">userid={{$rating->user_id}}</span> <span class="text-l font-bold">(értékelés={{$rating->rating}})</span>: {{$rating->comment}}</li>
 @endforeach
 </ul>
+
 <div class="justify-items-center">
 {!! $ratings->links() !!}
 </div>

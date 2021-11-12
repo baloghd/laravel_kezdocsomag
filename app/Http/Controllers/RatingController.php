@@ -21,18 +21,6 @@ class RatingController extends Controller
 
     }
 
-    public static function deleteAllRatingsFromMovie($id)
-    {
-        if (Auth::user()->is_admin) {
-            return redirect()->route('login');
-        }
-
-        Rating::where('movie_id', "=", $id)->delete();
-
-
-        return MovieController::show($id);
-    }
-
     public function create()
     {
 

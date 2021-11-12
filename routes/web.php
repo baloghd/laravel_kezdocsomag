@@ -15,26 +15,18 @@ use App\Models\Rating;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::resource("movies", MovieController::class);
+Route::put('/movies/{movie}/update', [MovieController::class, "update"])->middleware(['admin'])->name("movies.update");
+Route::resource("movies", MovieController::class)->except(['update']);
 Route::resource("ratings", RatingController::class);
 
 
-
-
-
-
-
-
-
-
-Route::get("/movies/{id}/deleteratings", function($id) {return RatingController::deleteAllRatingsFromMovie($id);})->name("movies.deleteratings");
-#Route::get("/movies/{id}/deleteratings", function($id) {echo $id;})->name("movies.deleteratings");
+Route::get("/movies/{id}/deleteratings", [MovieController::class, "deleteratings"])->middleware(['admin'])->name("movies.deleteratings");
+Route::get("/movies/{id}/delete", [MovieController::class, "delete"])->middleware(['admin'])->name("movies.delete");
+Route::get("/movies/{id}/restore", [MovieController::class, "restore"])->middleware(['admin'])->name("movies.restore");
 
 Route::get("/movies/{id}/poster", [MovieController::class, "poster"])->name("movies.poster");
 
 Route::get('/', function () { return MovieController::getMoviesWithAverageRatings();})->name("fooldal");
-#Route::get('/', function () { return MovieController::getMoviesWithRatings();})->name("fooldal");
 
 Route::get('/dashboard', function () {
     return view('dashboard');
